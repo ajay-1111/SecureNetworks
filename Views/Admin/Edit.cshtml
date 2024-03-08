@@ -1,0 +1,79 @@
+﻿@model SecureNetworks.Models.DBModels.SNProductsEntity
+
+@{
+    ViewData["Title"] = "Edit Product List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2>Edit Product</h2>
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label>Name:</label>
+            <input type="text" class="form-control" asp-for="SNProductName">
+        </div>
+        <div class="form-group">
+            <label>Price(£):</label>
+            <input type="text" class="form-control" asp-for="SNProductPrice">
+        </div>
+        <div class="form-group">
+            <label>Rating:</label>
+            <input type="text" class="form-control" asp-for="SNProductRating">
+        </div>
+        <div class="form-group">
+            <label>Stock:</label>
+            <input type="text" class="form-control" asp-for="SNProductStock">
+        </div>
+        <div class="form-group">
+            <label>Description:</label>
+            <textarea class="form-control" asp-for="SNProductDescription"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Category:</label>
+            <select class="form-control" id="SNProductCategory" name="SNProductCategory" required>
+                <option value="1">Network Devices</option>
+                <option value="2">Training Courses</option>
+                <option value="3">Testing Tool</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Image Name:</label>
+            <input type="text" class="form-control" value="@Model.SNProductImageUrl" disabled>
+            <input type="hidden" asp-for="SNProductImageUrl" />
+        </div>
+        <button type="submit" class="btn btn-primary">Update Product</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            var customMessage = '@(TempData["UpdateSuccess"] as string)';
+            var customErrorMessage = '@(TempData["UpdateError"] as string)';
+
+            if (customMessage) {
+                Swal.fire({
+                    title: 'Admin',
+                    text: customMessage,
+                    icon: 'success'
+                }).then(function () {
+                    var url = '@Url.Action("Index", "Admin")';
+                    window.location.href = url;
+                });
+            }
+
+            if (customErrorMessage) {
+                Swal.fire({
+                    title: 'Admin',
+                    text: customErrorMessage,
+                    icon: 'error'
+                }).then(function () {
+                    var url = '@Url.Action("Index", "Admin")';
+                    window.location.href = url;
+                });
+            }
+        });
+    </script>
+}

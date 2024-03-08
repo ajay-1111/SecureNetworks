@@ -1,49 +1,105 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using Microsoft.AspNetCore.Identity
+@using SecureNetworks.Models.DBModels;
+@inject SignInManager<ApplicationUserDBEntity> SignInManager
+
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SecureNetworks</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/SecureNetworks.styles.css" asp-append-version="true" />
+    <title>@ViewData["Title"] - Clothing Store</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <!-- Custom CSS -->
+    <style>
+        /* Ensure full-screen height */
+        html, body {
+            height: 100%;
+        }
+
+        /* Set carousel height */
+        .carousel-item img {
+            object-fit: cover;
+            height: 80vh; /* Adjust as needed */
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SecureNetworks</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a class="navbar-brand" asp-controller="Products" asp-action="Index">Clothing Store</a>
+                }
+                else
+                {
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">Clothing Store</a>
+                }
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" style="color: black" asp-area="" asp-controller="Products" asp-action="GetProductsByCategory" asp-route-category="Mens">Men</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="color: black" asp-area="" asp-controller="Products" asp-action="GetProductsByCategory" asp-route-category="Women">Women</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="color: black" asp-area="" asp-controller="Products" asp-action="GetProductsByCategory" asp-route-category="Kids">Kids</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" style="color: black" asp-area="" asp-controller="Home" asp-action="Index">About</a>
+                            </li>
+                            <li style="display: none;">
+                                <a class="nav-link" style="color: black" asp-area="" asp-controller="Admin" asp-action="Index">Admin</a>
+                            </li>
+
+                        </ul>
+                    }
+                    <ul class="navbar-nav ms-auto">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link bi bi-cart" style="color: black" asp-area="" asp-controller="Cart" asp-action="Index">@TempData["CartItemCount"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link bi bi-person-circle" style="color: black" asp-area="" asp-controller="MyAccount" asp-action="MyAccount"></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link bi bi-box-arrow-right" style="color: black" asp-area="" asp-controller="User" asp-action="SignIn"></a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link bi bi-box-arrow-in-left" style="color: black" asp-area="" asp-controller="User" asp-action="SignIn"></a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - SecureNetworks - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @* Include other necessary scripts here *@
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

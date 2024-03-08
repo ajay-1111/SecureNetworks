@@ -1,0 +1,77 @@
+﻿@model SecureNetworks.Models.DBModels.SNProductsEntity
+
+@{
+    ViewData["Title"] = "Create Product List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create New Product</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="SNProductName">Name:</label>
+        <input type="text" class="form-control" id="SNProductName" name="SNProductName" required>
+    </div>
+    <div class="form-group">
+        <label for="SNProductPrice">Price(£):</label>
+        <input type="number" class="form-control" id="SNProductPrice" name="SNProductPrice" required>
+    </div>
+    <div class="form-group">
+        <label for="SNProductRating">Rating:</label>
+        <input type="number" class="form-control" id="SNProductRating" name="SNProductRating" required>
+    </div>
+    <div class="form-group">
+        <label>Stock:</label>
+        <label for="SNProductStock">Stock:</label>
+        <input type="number" class="form-control" id="SNProductStock" name="SNProductStock" required>
+    </div>
+    <div class="form-group">
+        <label for="SNProductDescription">Description:</label>
+        <textarea class="form-control" id="SNProductDescription" name="SNProductDescription" rows="3" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="SNProductCategory">Category:</label>
+        <select class="form-control" id="SNProductCategory" name="SNProductCategory" required>
+            <option value="1">Network Devices</option>
+            <option value="2">Training Courses</option>
+            <option value="3">Testing Tool</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="SNProductImageUrl">Image:</label>
+        <input type="file" id="SNProductImageUrl" class="form-control-file" name="SNProductImageUrl" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Create Product</button>
+</form>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            var customMessage = '@(TempData["AddSuccess"] as string)';
+            var customErrorMessage = '@(TempData["AddError"] as string)';
+
+            if (customMessage) {
+                Swal.fire({
+                    title: 'Admin',
+                    text: customMessage,
+                    icon: 'success'
+                }).then(function () {
+                    var url = '@Url.Action("Index", "Admin")';
+                    window.location.href = url;
+                });
+            }
+
+            if (customErrorMessage) {
+                Swal.fire({
+                    title: 'Admin',
+                    text: customErrorMessage,
+                    icon: 'error'
+                }).then(function () {
+                    var url = '@Url.Action("Index", "Admin")';
+                    window.location.href = url;
+                });
+            }
+        });
+    </script>
+}
