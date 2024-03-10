@@ -12,8 +12,8 @@ using SecureNetworks.DataBaseContext;
 namespace SecureNetworks.Migrations
 {
     [DbContext(typeof(SecureNetworkDBContext))]
-    [Migration("20240310200842_SN-Migration-V4")]
-    partial class SNMigrationV4
+    [Migration("20240310212806_SN-Migration-V1_DB")]
+    partial class SNMigrationV1_DB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

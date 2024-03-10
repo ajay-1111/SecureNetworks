@@ -8,10 +8,9 @@ namespace SecureNetworks.Models.DBModels
         [Key]
         public int Id { get; set; } // Primary key
 
-        [ForeignKey("SNOrderId")]
-        public int SNOrderId { get; set; } // Foreign key to the order
+        public int SNOrderId { get; set; } 
         
-        public int SNProductId { get; set; } // Foreign key to the product
+        public int SNProductId { get; set; } 
 
         public int Quantity { get; set; }
 

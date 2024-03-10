@@ -168,12 +168,13 @@ namespace SecureNetworks.Controllers.Admin
                         existingProduct.SNProductImageUrl = uniqueFileName;
                     }
 
-                    // Update other properties of the product as usual
+                    // Update properties of the product as per the table
                     existingProduct.SNProductName = snProductsEntity.SNProductName;
                     existingProduct.SNProductPrice = snProductsEntity.SNProductPrice;
                     existingProduct.SNProductDescription = snProductsEntity.SNProductDescription;
                     existingProduct.SNProductStock = snProductsEntity.SNProductStock;
                     existingProduct.SNProductRating = snProductsEntity.SNProductRating;
+                    existingProduct.SNProductCategory = snProductsEntity.SNProductCategory;
                     existingProduct.ModifieDateTime = DateTime.Now;
 
                     _secureNetworkDbContext.Update(existingProduct);

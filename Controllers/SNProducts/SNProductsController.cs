@@ -142,6 +142,8 @@ namespace SecureNetworks.Controllers.SNProducts
         [HttpGet]
         public async Task<IActionResult> GetProductsByCategory(string category)
         {
+            TempData["CartItemCount"] = null;
+
             if (!string.IsNullOrWhiteSpace(category))
             {
                 var categoryEnum = (SNProductsEntity.ProductCategory)Enum.Parse(typeof(SNProductsEntity.ProductCategory), category, true);
@@ -165,6 +167,9 @@ namespace SecureNetworks.Controllers.SNProducts
                     Stock = product.SNProductStock,
                     Id = product.SNProductId,
                 }).ToList();
+
+                int cartItemCount = await GetCartItemCount();
+                TempData["CartItemCount"] = cartItemCount;
 
                 return View("Index", productViewModels);
             }
