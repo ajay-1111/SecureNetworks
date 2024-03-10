@@ -111,8 +111,6 @@ namespace SecureNetworks.Controllers.User
                     errorMessage += error.Description;
                 }
 
-                errorMessage = errorMessage.Replace("&#x27;", "");
-
                 TempData["RegisterationErrorMessage"] = errorMessage;
                 return RedirectToAction("SignUp", "User");
             }
