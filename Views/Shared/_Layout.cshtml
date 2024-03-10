@@ -2,12 +2,18 @@
 @using SecureNetworks.Models.DBModels;
 @inject SignInManager<ApplicationUserDBEntity> SignInManager
 
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var isAdminUser = HttpContextAccessor.HttpContext!.Session.GetInt32("IsAdminUser");
+}
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Clothing Store</title>
+    <title>@ViewData["Title"] - Secure Network</title>
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/css/site.css" />
@@ -32,11 +38,11 @@
             <div class="container">
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <a class="navbar-brand" asp-controller="Products" asp-action="Index">Clothing Store</a>
+                    <a class="navbar-brand" asp-controller="SNProducts" asp-action="Index">Secure Network</a>
                 }
                 else
                 {
-                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">Clothing Store</a>
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">Secure Network</a>
                 }
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -46,30 +52,41 @@
                     {
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
-                                <a class="nav-link" style="color: black" asp-area="" asp-controller="Products" asp-action="GetProductsByCategory" asp-route-category="Mens">Men</a>
+                                <a class="nav-link" style="color: black" asp-area="" asp-controller="SNProducts" asp-action="GetProductsByCategory" asp-route-category="NetworkDevices">NetworkDevices</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" style="color: black" asp-area="" asp-controller="Products" asp-action="GetProductsByCategory" asp-route-category="Women">Women</a>
+                                <a class="nav-link" style="color: black" asp-area="" asp-controller="SNProducts" asp-action="GetProductsByCategory" asp-route-category="TrainingCourses">TrainingCourses</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" style="color: black" asp-area="" asp-controller="Products" asp-action="GetProductsByCategory" asp-route-category="Kids">Kids</a>
+                                <a class="nav-link" style="color: black" asp-area="" asp-controller="SNProducts" asp-action="GetProductsByCategory" asp-route-category="TestingTools">TestingTools</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" style="color: black" asp-area="" asp-controller="Home" asp-action="Index">About</a>
+                                <a class="nav-link" style="color: black" asp-area="" asp-controller="AboutUs" asp-action="Index">About</a>
                             </li>
-                            <li style="display: none;">
-                                <a class="nav-link" style="color: black" asp-area="" asp-controller="Admin" asp-action="Index">Admin</a>
-                            </li>
-
+                            @if (isAdminUser is 1)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" style="color: black" asp-area="" asp-controller="Admin" asp-action="Index">Admin</a>
+                                </li>
+                            }
                         </ul>
                     }
                     <ul class="navbar-nav ms-auto">
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link bi bi-cart" style="color: black" asp-area="" asp-controller="Cart" asp-action="Index">@TempData["CartItemCount"]</a>
-                            </li>
+                            @if (TempData["CartItemCount"]?.ToString() != "0")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link bi bi-cart" style="color: black" asp-area="" asp-controller="Cart" asp-action="Index">@TempData["CartItemCount"]</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link bi bi-cart" style="color: black" asp-area="" asp-controller="Cart" asp-action="Index"></a>
+                                </li>
+                            }
                             <li class="nav-item">
                                 <a class="nav-link bi bi-person-circle" style="color: black" asp-area="" asp-controller="MyAccount" asp-action="MyAccount"></a>
                             </li>

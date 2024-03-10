@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SecureNetworks.DataBaseContext;
+using SecureNetworks.Helpers;
+using SecureNetworks.Models.DBModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +12,10 @@ builder.Services.AddControllersWithViews();
 // Add session services
 builder.Services.AddSession(options =>
 {
-    // Configure session options as needed
+    options.Cookie.Name = "IsAdminUserCookie";
     options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true; // Make the session cookie essential
+    options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
 });
 
 // Add ApplicationDbContext to the services
@@ -20,9 +23,11 @@ builder.Services.AddDbContext<SecureNetworkDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SecureNetworksDB")));
 
 // Add Identity services
-builder.Services.AddIdentity<SecureNetworkDBContext, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUserDBEntity, IdentityRole>()
     .AddEntityFrameworkStores<SecureNetworkDBContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<UserServiceHepler>();
 
 builder.Services.AddAuthorization();
 

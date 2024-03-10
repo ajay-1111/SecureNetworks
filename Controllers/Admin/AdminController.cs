@@ -43,7 +43,7 @@ namespace SecureNetworks.Controllers.Admin
         }
 
         // Action method to display form for adding a new product
-        [HttpPost]
+        [HttpGet]
         public IActionResult Create()
         {
             TempData["AddSuccess"] = null;
@@ -109,8 +109,7 @@ namespace SecureNetworks.Controllers.Admin
             return View(snProductsEntity);
         }
 
-        // Action method to display form for updating product details
-        [HttpPost]
+        
         public IActionResult Edit(int id)
         {
             TempData["AddSuccess"] = null;
@@ -122,7 +121,7 @@ namespace SecureNetworks.Controllers.Admin
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, SNProductsEntity snProductsEntity)
+        public async Task<IActionResult> Edit(int id, SNProductsEntity snProductsEntity, IFormFile? newImage)
         {
             TempData["UpdateSuccess"] = null;
             TempData["UpdateError"] = null;
@@ -136,8 +135,48 @@ namespace SecureNetworks.Controllers.Admin
             {
                 try
                 {
+                    var existingProduct = await _secureNetworkDbContext.tbl_SNProducts.FindAsync(id);
+
+                    if (existingProduct == null)
+                    {
+                        return NotFound();
+                    }
+
+                    if (newImage != null)
+                    {
+                        // Delete the existing image file from wwwroot/Images directory
+                        if (existingProduct.SNProductImageUrl != null)
+                        {
+                            var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "Images", existingProduct.SNProductImageUrl);
+                            if (System.IO.File.Exists(imagePath))
+                            {
+                                System.IO.File.Delete(imagePath);
+                            }
+                        }
+
+                        // Generate a unique file name for the new image
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + newImage.FileName;
+
+                        // Save the new image file to wwwroot/Images directory
+                        var newImagePath = Path.Combine(_webHostEnvironment.WebRootPath, "Images", uniqueFileName);
+                        await using (var stream = new FileStream(newImagePath, FileMode.Create))
+                        {
+                            await newImage.CopyToAsync(stream);
+                        }
+
+                        // Update the image file name in the database with the new file name
+                        existingProduct.SNProductImageUrl = uniqueFileName;
+                    }
+
                     // Update other properties of the product as usual
-                    _secureNetworkDbContext.Update(snProductsEntity);
+                    existingProduct.SNProductName = snProductsEntity.SNProductName;
+                    existingProduct.SNProductPrice = snProductsEntity.SNProductPrice;
+                    existingProduct.SNProductDescription = snProductsEntity.SNProductDescription;
+                    existingProduct.SNProductStock = snProductsEntity.SNProductStock;
+                    existingProduct.SNProductRating = snProductsEntity.SNProductRating;
+                    existingProduct.ModifieDateTime = DateTime.Now;
+
+                    _secureNetworkDbContext.Update(existingProduct);
                     await _secureNetworkDbContext.SaveChangesAsync();
                     TempData["UpdateSuccess"] = $"ProductID {snProductsEntity.SNProductId} has been updated successfully.";
                 }
@@ -149,7 +188,7 @@ namespace SecureNetworks.Controllers.Admin
             return RedirectToAction("Index");
         }
 
-        // Action method to delete a product
+
         public IActionResult Delete(int id)
         {
             TempData["AddSuccess"] = null;
@@ -158,8 +197,42 @@ namespace SecureNetworks.Controllers.Admin
             TempData["UpdateError"] = null;
 
             var product = _secureNetworkDbContext.tbl_SNProducts.Find(id);
-            if (product != null) _secureNetworkDbContext.tbl_SNProducts.Remove(product);
-            _secureNetworkDbContext.SaveChanges();
+            if (product != null)
+            {
+                // Get the filename of the image associated with the product
+                string? filename = product.SNProductImageUrl; // Assuming ImageUrl contains the filename
+
+                // Remove the product from the database
+                _secureNetworkDbContext.tbl_SNProducts.Remove(product);
+                _secureNetworkDbContext.SaveChanges();
+
+                // Delete the corresponding file from the image folder in the wwwroot directory
+                if (filename != null)
+                {
+                    string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", filename);
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        try
+                        {
+                            System.IO.File.Delete(imagePath);
+                        }
+                        catch (Exception ex)
+                        {
+                            // Handle the exception (log, display error message, etc.)
+                            TempData["DeleteError"] = "Error deleting image file: " + ex.Message;
+                            return RedirectToAction("Index");
+                        }
+                    }
+                    else
+                    {
+                        TempData["DeleteError"] = "Image file not found.";
+                    }
+                }
+            }
+            else
+            {
+                TempData["DeleteError"] = "Product not found.";
+            }
 
             return RedirectToAction("Index");
         }

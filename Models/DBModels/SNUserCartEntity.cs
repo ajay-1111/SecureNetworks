@@ -1,7 +1,10 @@
-﻿namespace SecureNetworks.Models.DBModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SecureNetworks.Models.DBModels
 {
     public class SNUserCartEntity
     {
+        [Key]
         public int SNCartId { get; set; }
 
         public int SNProductId { get; set; }

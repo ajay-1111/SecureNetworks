@@ -38,8 +38,15 @@ namespace SecureNetworks.Controllers.Cart
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            TempData["CartItemCount"] = null;
+
             var cartItems = await GetCartItemsForCurrentUser();
             ViewBag.CartItemCount = await GetCartItemCount();
+
+            // Set the cart item count in TempData
+            int cartItemCount = await GetCartItemCount();
+            TempData["CartItemCount"] = cartItemCount;
+
             return View(cartItems);
         }
 
@@ -159,6 +166,8 @@ namespace SecureNetworks.Controllers.Cart
         [HttpPost]
         public async Task<IActionResult> RemoveFromCart(int productId)
         {
+            TempData["CartItemCount"] = "";
+
             // Retrieve the current user's ID from the HttpContext
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -179,6 +188,10 @@ namespace SecureNetworks.Controllers.Cart
                 // Return a success response
                 return Json(new { success = true });
             }
+
+            // Set the cart item count in TempData
+            int cartItemCount = await GetCartItemCount();
+            TempData["CartItemCount"] = cartItemCount;
 
             // Return an error response if the item was not found in the cart
             return Json(new { success = false });

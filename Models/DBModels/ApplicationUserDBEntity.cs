@@ -9,30 +9,27 @@
 
 namespace SecureNetworks.Models.DBModels
 {
-    using System.ComponentModel.DataAnnotations;
     using Microsoft.AspNetCore.Identity;
+    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     /// The ApplicationUserDBEntity.
     /// </summary>
     public class ApplicationUserDBEntity : IdentityUser
     {
-        /// <summary>Gets or sets the FirstName.</summary>
-        [StringLength(100, ErrorMessage = "FirstName is Mandatory.", MinimumLength = 1)]
-        [Required]
+        [StringLength(100)]
         public string FirstName { get; set; }
 
-        /// <summary>Gets or sets the LastName.</summary>
-        [StringLength(100, ErrorMessage = "LastName is Mandatory.", MinimumLength = 1)]
-        [Required]
-        public string LastName { get; set; } = string.Empty;
+       [StringLength(100)]
+        public string LastName { get; set; }
 
+        [StringLength(100, MinimumLength = 10)]
+        public string Telephone { get; set; }
+        
         [EmailAddress]
-        [Required]
+        [StringLength(100)]
         public string Email { get; set; }
 
-        [StringLength(10, ErrorMessage = "Telephone is Mandatory.", MinimumLength = 10)]
-        [Required]
-        public string Telephone { get; set; }
+        public int? IsAdminUser { get; set; }
     }
 }

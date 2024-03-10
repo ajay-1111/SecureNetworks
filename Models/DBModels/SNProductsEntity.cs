@@ -1,4 +1,6 @@
-﻿namespace SecureNetworks.Models.DBModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SecureNetworks.Models.DBModels
 {
     public class SNProductsEntity
     {
@@ -9,6 +11,7 @@
             TestingTools = 3,
         }
 
+        [Key]
         public int SNProductId { get; set; }
 
         public ProductCategory SNProductCategory { get; set; }

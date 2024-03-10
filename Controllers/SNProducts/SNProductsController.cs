@@ -34,10 +34,18 @@ namespace SecureNetworks.Controllers.SNProducts
             _userManager = userManager;
         }
 
+        [HttpGet]
+        public IActionResult Products()
+        {
+            TempData["CartItemCount"] = null;
+            return View(new SNProductViewModel());
+        }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
             TempData["NoProducts"] = null;
+            TempData["CartItemCount"] = null;
             // Retrieve all products from the database
             var products = _context.tbl_SNProducts.ToList();
 
@@ -46,7 +54,7 @@ namespace SecureNetworks.Controllers.SNProducts
             {
                 // If products list is empty, set an error message using ViewBag
                 TempData["NoProducts"] = "No products available at the moment.";
-                return View();
+                return RedirectToAction("Products","SNProducts");
             }
 
             // Create a list to hold the view models for all products
@@ -69,6 +77,9 @@ namespace SecureNetworks.Controllers.SNProducts
                 productViewModels.Add(productModel);
             }
 
+            int cartItemCount = await GetCartItemCount();
+            TempData["CartItemCount"] = cartItemCount;
+
             // Pass the list of view models to the view
             return View(productViewModels);
         }
@@ -77,6 +88,7 @@ namespace SecureNetworks.Controllers.SNProducts
         public async Task<IActionResult> SNProductDetails(int productId)
         {
             TempData["NoProductFound"] = null;
+            TempData["CartItemCount"] = null;
 
             // Retrieve the product with the specified id from the database
             var product = await _context.tbl_SNProducts.FirstOrDefaultAsync(p => p.SNProductId == productId);
@@ -141,7 +153,7 @@ namespace SecureNetworks.Controllers.SNProducts
                 if (products.Count == 0)
                 {
                     TempData["NoProducts"] = $"No products available for category: {category}";
-                    return Json(new { success = true });
+                    return RedirectToAction("Products", "SNProducts");
                 }
 
                 var productViewModels = products.Select(product => new SNProductViewModel()

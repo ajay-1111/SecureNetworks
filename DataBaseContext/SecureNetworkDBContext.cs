@@ -36,5 +36,9 @@ namespace SecureNetworks.DataBaseContext
         public virtual DbSet<SNProductCategoryEntity> tbl_SNProductsCategories { get; set; } = null!;
 
         public virtual DbSet<SNUserCartEntity> tbl_SNUserCartEntities { get; set; } = null!;
+
+        public virtual DbSet<SNPurchaseOrderEntity> tbl_SNPurchaseOrderEntities { get; set; } = null!;
+
+        public virtual DbSet<SNPurchaseOrderItemEntity> tbl_SNPurchaseOrderItemEntities { get; set; } = null!;
     }
 }

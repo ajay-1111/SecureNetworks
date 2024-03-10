@@ -16,3 +16,110 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.custom-table th,
+.custom-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.custom-table th {
+    background-color: #f2f2f2;
+}
+
+.quantity-container {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-container input {
+    width: 50px;
+    text-align: center;
+}
+
+.quantity-container button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #f2f2f2;
+    cursor: pointer;
+}
+
+.quantity-container button:hover {
+    background-color: #e2e2e2;
+}
+
+.card {
+    background-color: #f2f2f2;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.card-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.card-subtitle {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.checkOutBtn,
+.buyMoreBtn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #2d545e;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.checkOutBtn:hover,
+.buyMoreBtn:hover {
+    background-color: #1d3e42;
+}
+
+.quantity-container {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-container input {
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    transition: border-color 0.3s;
+}
+
+.quantity-container input:focus {
+    outline: none;
+    border-color: #2d545e; /* Change to your desired focus color */
+}
+
+.quantity-input {
+    width: 60px; /* Adjust the width as needed */
+    height: 30px; /* Adjust the height as needed */
+    padding: 5px; /* Adjust the padding as needed */
+    border: 1px solid #ccc; /* Add a border with a light gray color */
+    border-radius: 5px; /* Add rounded corners */
+    text-align: center; /* Center the text horizontally */
+    transition: border-color 0.3s; /* Add a smooth transition for border color changes */
+}
+
+.quantity-input:focus {
+    outline: none; /* Remove the default focus outline */
+    border-color: #2d545e; /* Change the border color when the input is focused */
+}

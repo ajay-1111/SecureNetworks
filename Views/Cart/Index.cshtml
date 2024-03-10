@@ -4,47 +4,51 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th scope="col">Product Name</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>@item.SNProductName</td>
-                                <td>$@item.SNProductPrice</td>
-                                <td>
-                                    <div class="input-group">
-                                        <button class="btn btn-outline-secondary minusBtn" data-product-id="@item.SNProductQuantity">-</button>
-                                        <input type="text" class="form-control quantity-input" value="@item.SNProductQuantity" id="quantity-@item.SNProductId" readonly />
-                                        <button class="btn btn-outline-secondary plusBtn" data-product-id="@item.SNProductId">+</button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <button class="btn btn-danger removeBtn" data-product-id="@item.SNProductId">Remove</button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Your Cart</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Product Name</th>
+                                    <th scope="col">Price(£)</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.SNProductName</td>
+                                        <td>@item.SNProductPrice</td>
+                                        <td>
+                                            <div class="quantity-container">
+                                                <input type="number" class="quantity-input form-control" value="@item.SNProductQuantity" data-product-id="@item.SNProductId" min="1" />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger removeBtn" data-product-id="@item.SNProductId">Remove</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row justify-content-end">
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Total</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">$<span id="totalPrice">@Model.Sum(item => item.SNProductPrice * item.SNProductQuantity)</span></h6>
-                    <button class="btn btn-outline-light btn-block checkOutBtn" style="background-color: #2d545e !important; color: white">Proceed to Checkout</button>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        <span id="totalPrice">0.00</span>
+                    </h6>
+                    <button class="btn btn-dark btn-block mt-3 checkOutBtn">Proceed to Checkout</button>
+                    <button class="btn btn-dark btn-block mt-3 buyMoreBtn">Continue Shopping</button>
                 </div>
             </div>
         </div>
@@ -54,24 +58,12 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Increase quantity
-            $(document).on('click', '.plusBtn', function () {
-                var productId = $(this).data('product-id');
-                var quantityInput = $('#quantity-' + productId);
-                var quantity = parseInt(quantityInput.val());
-                quantityInput.val(quantity + 1);
-                updateTotalPrice();
-            });
+            // Update total price on page load
+            updateTotalPrice();
 
-            // Decrease quantity
-            $(document).on('click', '.minusBtn', function () {
-                var productId = $(this).data('product-id');
-                var quantityInput = $('#quantity-' + productId);
-                var quantity = parseInt(quantityInput.val());
-                if (quantity > 1) {
-                    quantityInput.val(quantity - 1);
-                    updateTotalPrice();
-                }
+            // Increase and decrease quantity
+            $(document).on('change', '.quantity-input', function () {
+                updateTotalPrice();
             });
 
             // Remove item
@@ -109,7 +101,7 @@
                     success: function (response) {
                         if (response.success) {
                             Swal.fire(
-                                'Clothing Store',
+                                'Secure Network',
                                 response.message,
                                 'success').then(function () {
                                     var url = '@Url.Action("Index", "SNProducts")';
@@ -117,13 +109,27 @@
                                 });
                         } else {
                             Swal.fire(
-                                'Clothing Store',
+                                'Secure Network',
                                 response.message,
                                 'error').then(function () {
                                     var url = '@Url.Action("Index", "SNProducts")';
                                     window.location.href = url;
                                 });
                         }
+                    },
+                    error: function (err) {
+                        console.error('Error:', err);
+                    }
+                });
+            });
+
+            // Proceed to Checkout
+            $(document).on('click', '.buyMoreBtn', function () {
+                // Send AJAX request to place the order
+                $.ajax({
+                    url: '/SNProducts/Index', // Update the URL to your controller action
+                    method: 'POST',
+                    success: function (response) {                       
                     },
                     error: function (err) {
                         console.error('Error:', err);
@@ -142,7 +148,7 @@
                         totalPrice += price * quantity;
                     }
                 });
-                $('#totalPrice').text('$' + totalPrice.toFixed(2)); // Update the text to include a single dollar sign
+                $('#totalPrice').text('£' + totalPrice.toFixed(2)); // Update the text to include a single dollar sign
             }
         });
     </script>

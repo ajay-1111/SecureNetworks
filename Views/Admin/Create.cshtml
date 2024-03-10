@@ -1,48 +1,94 @@
 ﻿@model SecureNetworks.Models.DBModels.SNProductsEntity
 
 @{
-    ViewData["Title"] = "Create Product List";
+    ViewData["Title"] = "Create Product";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create New Product</h2>
+<style>
+    .createcontainer {
+        padding-top: 50px;
+    }
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="SNProductName">Name:</label>
-        <input type="text" class="form-control" id="SNProductName" name="SNProductName" required>
+    .form-create-container {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0px 0px 20px #000000;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 50px; /* Adjust as needed */
+    }
+
+
+    .form-create-group {
+        margin-bottom: 20px;
+    }
+
+    .form-control-file {
+        display: block;
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: DimGray;
+        background-color: White;
+        background-clip: padding-box;
+        border: 1px solid LightSlateGray;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+</style>
+
+<div class="createcontainer">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="form-create-container">
+                <h2 class="text-center mb-4">Create New Product</h2>
+
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div class="form-create-group">
+                        <label for="SNProductName">Name:</label>
+                        <input type="text" class="form-control" id="SNProductName" name="SNProductName" required>
+                    </div>
+                    <div class="form-create-group">
+                        <label for="SNProductPrice">Price (£):</label>
+                        <input type="number" class="form-control" id="SNProductPrice" name="SNProductPrice" required>
+                    </div>
+                    <div class="form-create-group">
+                        <label for="SNProductRating">Rating:</label>
+                        <input type="number" class="form-control" id="SNProductRating" name="SNProductRating" required min="1" max="5" pattern="[1-5]">
+                    </div>
+
+                    <div class="form-create-group">
+                        <label for="SNProductStock">Stock:</label>
+                        <input type="number" class="form-control" id="SNProductStock" name="SNProductStock" required>
+                    </div>
+                    <div class="form-create-group">
+                        <label for="SNProductDescription">Description:</label>
+                        <textarea class="form-control" id="SNProductDescription" name="SNProductDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="form-create-group">
+                        <label for="SNProductCategory">Category:</label>
+                        <select class="form-control" id="SNProductCategory" name="SNProductCategory" required>
+                            <option value="1">Network Devices</option>
+                            <option value="2">Training Courses</option>
+                            <option value="3">Testing Tool</option>
+                        </select>
+                    </div>
+                    <div class="form-create-group">
+                        <label for="SNProductImageUrl">Image:</label>
+                        <input type="file" class="form-control-file" id="SNProductImageUrl" name="productImage" accept="image/*" required>
+                    </div>
+                    <div class="form-create-group text-center">
+                        <button type="submit" class="btn btn-primary">Create Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="SNProductPrice">Price(£):</label>
-        <input type="number" class="form-control" id="SNProductPrice" name="SNProductPrice" required>
-    </div>
-    <div class="form-group">
-        <label for="SNProductRating">Rating:</label>
-        <input type="number" class="form-control" id="SNProductRating" name="SNProductRating" required>
-    </div>
-    <div class="form-group">
-        <label>Stock:</label>
-        <label for="SNProductStock">Stock:</label>
-        <input type="number" class="form-control" id="SNProductStock" name="SNProductStock" required>
-    </div>
-    <div class="form-group">
-        <label for="SNProductDescription">Description:</label>
-        <textarea class="form-control" id="SNProductDescription" name="SNProductDescription" rows="3" required></textarea>
-    </div>
-    <div class="form-group">
-        <label for="SNProductCategory">Category:</label>
-        <select class="form-control" id="SNProductCategory" name="SNProductCategory" required>
-            <option value="1">Network Devices</option>
-            <option value="2">Training Courses</option>
-            <option value="3">Testing Tool</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="SNProductImageUrl">Image:</label>
-        <input type="file" id="SNProductImageUrl" class="form-control-file" name="SNProductImageUrl" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Create Product</button>
-</form>
+</div>
+
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
