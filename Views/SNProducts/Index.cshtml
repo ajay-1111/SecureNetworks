@@ -1,0 +1,79 @@
+﻿@model List<SecureNetworks.Models.ViewModel.SNProductViewModel>
+
+<div class="container">
+    <div class="row mt-5 mb-3">
+        @if (Model.Any())
+        {
+            @foreach (var product in Model)
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div style="height: 150px; overflow: hidden;">
+                            <!-- Limit the height of the image container -->
+                            <img src="~/Images/@product.ImageUrl" class="card-img-top" style="height: 100%;" alt="Product Image"> <!-- Set the height of the image -->
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">Price(£): @product.Price</p>
+                            <p class="card-text">Rating: @product.Rating/5</p>
+                            <p class="card-text">Stock: @product.Stock</p>
+                            <a href="@Url.Action("SNProductDetails", "SNProducts", new { productId = product.Id })" class="btn btn-primary" style="background-color: #2d545e !important; color: white">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div>No products available.</div>
+        }
+    </div>
+
+    <!-- Pagination -->
+    <div class="row">
+        <div class="col">
+            @if (Model.Any())
+            {
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        @for (int i = 1; i <= Math.Ceiling((double)Model.Count / 6); i++)
+                        {
+                            <li class="page-item @(i == 1 ? "active" : "")">
+                                <a class="page-link" href="?page=@i">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var NoProducts = '@(TempData["NoProducts"] as string)';
+            var NoProductFound = '@(TempData["NoProductFound"] as string)';
+
+            if (NoProducts) {
+                Swal.fire({
+                    title: 'Secure Networks',
+                    text: NoProducts,
+                    icon: 'warning'
+                });
+            }
+
+            if (NoProductFound) {
+                Swal.fire({
+                    title: 'Secure Networks',
+                    text: NoProductFound,
+                    icon: 'warning'
+                });
+            }
+        });
+    </script>
+}

@@ -1,0 +1,26 @@
+﻿@model SecureNetworks.Models.ViewModel.SNProductViewModel
+@{
+    ViewData["Title"] = "Products View";
+}
+
+<style>
+    .custom-bg-color {
+        background-color: #ff6347; /* Coral color */
+        color: #fff; /* White text color */
+    }
+    .custom-card {
+        border: 1px solid #ff6347; /* Reduced border size */
+        margin-top: 50px; /* Adjust the top margin as needed */
+    }
+</style>
+
+<div class="row justify-content-center align-items-center" style="height: 80vh;"> <!-- Adjusted height -->
+    <div class="col-md-6">
+        <div class="card shadow p-3 mb-5 bg-body rounded custom-card">
+            <div class="card-body custom-bg-color">
+                <h1 class="text-center">Oops! Something went wrong.</h1>
+                <p class="text-center">No products are available at the moment. Please contact the administrator.</p>
+            </div>
+        </div>
+    </div>
+</div>
