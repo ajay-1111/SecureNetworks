@@ -1,8 +1,39 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Secure Networks Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Custom CSS -->
+<style>
+    /* Ensure full-screen height */
+    html, body {
+        height: 100%;
+    }
+
+    /* Set carousel height */
+    .carousel-item img {
+        object-fit: cover;
+        height: 80vh; /* Adjust as needed */
+        width: 100%;
+    }
+</style>
+
+<!-- Add some space between the navigation bar and the carousel -->
+<div class="my-3"></div>
+
+<!-- Image carousel -->
+<div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="2000">
+            <img src="Images/IDS.jpg" class="d-block img-fluid" alt="IDS">
+        </div>
+        <div class="carousel-item" data-bs-interval="2000">
+            <img src="Images/IDS_IPS.png" class="d-block img-fluid" alt="IDS_IPS">
+        </div>
+        <div class="carousel-item">
+            <img src="Images/Training.jpg" class="d-block img-fluid" alt="Training">
+        </div>
+        <div class="carousel-item">
+            <img src="Images/PenetratingTesting.jpg" class="d-block img-fluid" alt="PenetratingTesting">
+        </div>
+    </div>
 </div>

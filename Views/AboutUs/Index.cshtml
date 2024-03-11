@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "About Us";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    /* Basic styling */
+    .container-Aboutus {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .section-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #666;
+    }
+
+    /* Styling for sections */
+    .about-section,
+    .history-section,
+    .team-section {
+        margin-bottom: 40px;
+    }
+
+    /* Styling for team members */
+    .team-members {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .team-member {
+        width: 48%;
+        margin-bottom: 20px;
+    }
+
+    .team-member img {
+        width: 100%;
+        height: auto;
+        border-radius: 50%;
+        margin-bottom: 10px;
+    }
+
+    .team-member h3 {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .team-member p {
+        font-size: 14px;
+        color: #888;
+    }
+
+</style>
+
+<div class="container-Aboutus">
+    <section class="about-section">
+        <h2 class="section-title">About Us</h2>
+        <p>Welcome to Secure Networks, where we strive to provide exceptional cyber security products and services to our customers.</p>
+    </section>
+
+    <section class="history-section">
+        <h2 class="section-title">Our History</h2>
+        <p></p>
+    </section>
+
+    <section class="team-section">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="section-title">Meet Our Team</h2>
+                <div class="team-members">
+                    <div class="team-member">
+                        <img src="~/images/e796e7bf-d2bc-41d1-83cd-5c4910b00e18_approve.jpg" alt="Team Member 1">
+                        <h3>Vinay Reddy Desham</h3>
+                        <p>Masters Student</p>
+                        <p>MSc Cyber Security</p>
+                        <p>Nottingham Trent University</p>
+                        <p>United Kingdom</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>

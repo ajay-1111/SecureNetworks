@@ -1,0 +1,155 @@
+﻿@model List<SecureNetworks.Models.ViewModel.SNCartItemViewModel>
+
+<h2 class="text-center mb-4" style="padding-top: 2em">Shopping Cart</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Your Cart</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Product Name</th>
+                                    <th scope="col">Price(£)</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.SNProductName</td>
+                                        <td>@item.SNProductPrice</td>
+                                        <td>
+                                            <div class="quantity-container">
+                                                <input type="number" class="quantity-input form-control" value="@item.SNProductQuantity" data-product-id="@item.SNProductId" min="1" />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger removeBtn" data-product-id="@item.SNProductId">Remove</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        <span id="totalPrice">0.00</span>
+                    </h6>
+                    <button class="btn btn-dark btn-block mt-3 checkOutBtn">Proceed to Checkout</button>
+                    <button class="btn btn-dark btn-block mt-3 buyMoreBtn" asp-action="Index" asp-controller="SNProducts">Continue Shopping</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Update total price on page load
+            updateTotalPrice();
+
+            // Increase and decrease quantity
+            $(document).on('change', '.quantity-input', function () {
+                updateTotalPrice();
+            });
+
+            // Remove item
+            $(document).on('click', '.removeBtn', function () {
+                var productId = $(this).data('product-id');
+                var row = $(this).closest('tr');
+
+                // Send AJAX request to remove the item from the cart
+                $.ajax({
+                    url: '/Cart/RemoveFromCart', // Update the URL to your controller action
+                    method: 'POST',
+                    data: { productId: productId },
+                    success: function (response) {
+                        if (response.success) {
+                            // Remove the table row from the DOM if deletion was successful
+                            row.remove();
+                            updateTotalPrice();
+                        } else {
+                            // Handle the case where deletion failed
+                            console.error('Failed to remove item from cart.');
+                        }
+                    },
+                    error: function (err) {
+                        console.error('Error:', err);
+                    }
+                });
+            });
+
+            // Proceed to Checkout
+            $(document).on('click', '.checkOutBtn', function () {
+                // Send AJAX request to place the order
+                $.ajax({
+                    url: '/Orders/PlaceOrder', // Update the URL to your controller action
+                    method: 'POST',
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire(
+                                'Secure Network',
+                                response.message,
+                                'success').then(function () {
+                                    var url = '@Url.Action("Index", "SNProducts")';
+                                    window.location.href = url;
+                                });
+                        } else {
+                            Swal.fire(
+                                'Secure Network',
+                                response.message,
+                                'error').then(function () {
+                                    var url = '@Url.Action("Index", "SNProducts")';
+                                    window.location.href = url;
+                                });
+                        }
+                    },
+                    error: function (err) {
+                        console.error('Error:', err);
+                    }
+                });
+            });
+
+            // Proceed to Checkout
+            $(document).on('click', '.buyMoreBtn', function () {
+                // Send AJAX request to place the order
+                $.ajax({
+                    url: '/SNProducts/Index', // Update the URL to your controller action
+                    method: 'GET',
+                    success: function (response) {                       
+                    },
+                    error: function (err) {
+                        console.error('Error:', err);
+                    }
+                });
+            });
+
+            // Update total price
+            function updateTotalPrice() {
+                var totalPrice = 0;
+                $('.quantity-input').each(function () {
+                    var priceText = $(this).closest('tr').find('td:eq(1)').text().trim().replace('$', ''); // Remove extra spaces and $
+                    var price = parseFloat(priceText);
+                    var quantity = parseInt($(this).val());
+                    if (!isNaN(price) && !isNaN(quantity)) {
+                        totalPrice += price * quantity;
+                    }
+                });
+                $('#totalPrice').text('£' + totalPrice.toFixed(2)); // Update the text to include a single dollar sign
+            }
+        });
+    </script>
+}
