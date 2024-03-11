@@ -48,7 +48,7 @@
                         <span id="totalPrice">0.00</span>
                     </h6>
                     <button class="btn btn-dark btn-block mt-3 checkOutBtn">Proceed to Checkout</button>
-                    <button class="btn btn-dark btn-block mt-3 buyMoreBtn">Continue Shopping</button>
+                    <button class="btn btn-dark btn-block mt-3 buyMoreBtn" asp-action="Index" asp-controller="SNProducts">Continue Shopping</button>
                 </div>
             </div>
         </div>
@@ -128,7 +128,7 @@
                 // Send AJAX request to place the order
                 $.ajax({
                     url: '/SNProducts/Index', // Update the URL to your controller action
-                    method: 'POST',
+                    method: 'GET',
                     success: function (response) {                       
                     },
                     error: function (err) {
