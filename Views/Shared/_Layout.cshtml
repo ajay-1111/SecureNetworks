@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using SecureNetworks.Models.DBModels;
+@using SecureNetworks.Models.DBModels
 @inject SignInManager<ApplicationUserDBEntity> SignInManager
 
 @inject IHttpContextAccessor HttpContextAccessor
@@ -36,20 +36,13 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Secure Network</a>
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <a class="navbar-brand" asp-controller="SNProducts" asp-action="Index">Secure Network</a>
-                }
-                else
-                {
-                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">Secure Network</a>
-                }
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    @if (SignInManager.IsSignedIn(User))
-                    {
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
                                 <a class="nav-link" style="color: black" asp-area="" asp-controller="SNProducts" asp-action="GetProductsByCategory" asp-route-category="NetworkDevices">NetworkDevices</a>
@@ -60,7 +53,6 @@
                             <li class="nav-item">
                                 <a class="nav-link" style="color: black" asp-area="" asp-controller="SNProducts" asp-action="GetProductsByCategory" asp-route-category="TestingTools">TestingTools</a>
                             </li>
-
                             <li class="nav-item">
                                 <a class="nav-link" style="color: black" asp-area="" asp-controller="AboutUs" asp-action="Index">About</a>
                             </li>
@@ -71,37 +63,29 @@
                                 </li>
                             }
                         </ul>
-                    }
-                    <ul class="navbar-nav ms-auto">
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            @if (TempData["CartItemCount"]?.ToString() != "0")
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link bi bi-cart" style="color: black" asp-area="" asp-controller="Cart" asp-action="Index">@TempData["CartItemCount"]</a>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link bi bi-cart" style="color: black" asp-area="" asp-controller="Cart" asp-action="Index"></a>
-                                </li>
-                            }
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link bi bi-cart" style="color: black" asp-area="" asp-controller="Cart" asp-action="Index">@TempData["CartItemCount"]</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link bi bi-person-circle" style="color: black" asp-area="" asp-controller="MyAccount" asp-action="MyAccount"></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link bi bi-box-arrow-right" style="color: black" asp-area="" asp-controller="User" asp-action="SignIn"></a>
+                                <form id="logoutForm" asp-controller="User" asp-action="Logout" method="post" class="form-inline">
+                                    <button type="submit" class="nav-link btn btn-link" style="color: black">Logout</button>
+                                </form>
                             </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link bi bi-box-arrow-in-left" style="color: black" asp-area="" asp-controller="User" asp-action="SignIn"></a>
-                            </li>
-                        }
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" style="color: black" asp-controller="User" asp-action="SignIn">Login</a>
+                        </li>
                     </ul>
-                </div>
+                }
             </div>
         </nav>
     </header>
@@ -115,8 +99,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @* Include other necessary scripts here *@
-
+    <!-- Include other necessary scripts here -->
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
