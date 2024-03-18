@@ -118,7 +118,7 @@ namespace SecureNetworks.Controllers.User
             return View(model);
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
@@ -129,6 +129,9 @@ namespace SecureNetworks.Controllers.User
 
             int cartItemCount = await GetCartItemCount();
             TempData["CartItemCount"] = cartItemCount;
+
+            // Clear session variables if any
+            HttpContext.Session.Clear();
 
             return RedirectToAction("Index", "Home");
         }
