@@ -144,7 +144,6 @@ namespace SecureNetworks.Controllers.Admin
 
                     if (newImage != null)
                     {
-                        // Delete the existing image file from wwwroot/Images directory
                         if (existingProduct.SNProductImageUrl != null)
                         {
                             var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "Images", existingProduct.SNProductImageUrl);
@@ -154,21 +153,21 @@ namespace SecureNetworks.Controllers.Admin
                             }
                         }
 
-                        // Generate a unique file name for the new image
+                        
                         string uniqueFileName = Guid.NewGuid().ToString() + "_" + newImage.FileName;
 
-                        // Save the new image file to wwwroot/Images directory
+                        
                         var newImagePath = Path.Combine(_webHostEnvironment.WebRootPath, "Images", uniqueFileName);
                         await using (var stream = new FileStream(newImagePath, FileMode.Create))
                         {
                             await newImage.CopyToAsync(stream);
                         }
 
-                        // Update the image file name in the database with the new file name
+                        
                         existingProduct.SNProductImageUrl = uniqueFileName;
                     }
 
-                    // Update properties of the product as per the table
+                    
                     existingProduct.SNProductName = snProductsEntity.SNProductName;
                     existingProduct.SNProductPrice = snProductsEntity.SNProductPrice;
                     existingProduct.SNProductDescription = snProductsEntity.SNProductDescription;
@@ -200,14 +199,14 @@ namespace SecureNetworks.Controllers.Admin
             var product = _secureNetworkDbContext.tbl_SNProducts.Find(id);
             if (product != null)
             {
-                // Get the filename of the image associated with the product
-                string? filename = product.SNProductImageUrl; // Assuming ImageUrl contains the filename
+                
+                string? filename = product.SNProductImageUrl; 
 
-                // Remove the product from the database
+                
                 _secureNetworkDbContext.tbl_SNProducts.Remove(product);
                 _secureNetworkDbContext.SaveChanges();
 
-                // Delete the corresponding file from the image folder in the wwwroot directory
+                
                 if (filename != null)
                 {
                     string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", filename);
@@ -219,7 +218,7 @@ namespace SecureNetworks.Controllers.Admin
                         }
                         catch (Exception ex)
                         {
-                            // Handle the exception (log, display error message, etc.)
+                            
                             TempData["DeleteError"] = "Error deleting image file: " + ex.Message;
                             return RedirectToAction("Index");
                         }
